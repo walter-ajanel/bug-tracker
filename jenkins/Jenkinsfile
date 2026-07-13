@@ -16,15 +16,16 @@ pipeline {
             steps {
                 dir('bugtracker-backend') {
                     sh '''
-						whoami
-						id
-						echo HOME=$HOME
-						go env
-                        mkdir -p $GOCACHE
-                        go test ./... -v
+						mkdir -p $GOCACHE
+                        go test ./... -v 2>&1 | go-unit-report > test-results.xml
                     '''
                 }
             }
+			post{
+				always{
+					junit 'bugtracker-backend/test-results.xml'
+				}
+			}
         }
 		
 		stage('frontend tests'){
