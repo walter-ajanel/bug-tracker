@@ -19,25 +19,29 @@ pipeline {
 						mkdir -p $GOCACHE
                         go test ./... -v 2>&1 | go-junit-report > test-results.xml
 						
-						go test -coverprofile=coverage.out -covermode=atomic ./...
-						go tool cover -html=coverage.out -o coverage.html
-						
-						mkdir -p reports
-						mv coverage.html reports/
-						
+						# Generate coverage report
+                        go test -coverprofile=coverage.out -covermode=atomic ./...
+                        go tool cover -html=coverage.out -o coverage.html
+
+                        mkdir -p reports
+                        mv coverage.html reports/
+                        mv report.xml reports/
                     '''
                 }
             }
-			post{
-				always{
-					junit 'bugtracker-backend/test-results.xml'
-					publisHTML target:[
-						reportDir: 'bugtracker-backend/reports',
-						reportFiles: 'coverage.html',
-						reportName: 'Backend coverage report'
-					]
-				}
-			}
+            post {
+                always {
+                    junit 'bugtracker-backend/reports/report.xml'
+                    publishHTML target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'bugtracker-backend/reports',
+                        reportFiles: 'coverage.html',
+                        reportName: 'Coverage Report'
+                    ]
+                }
+            }
         }
 		
 		stage('frontend tests'){
