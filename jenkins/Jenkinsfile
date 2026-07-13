@@ -15,6 +15,10 @@ pipeline {
             steps {
                 dir('bugtracker-backend') {
                     sh '''
+						whoami
+						id
+						echo HOME=$HOME
+						go env
                         mkdir -p $GOCACHE
                         go test ./... -v
                     '''
