@@ -2,9 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Unit test - Backend') {
+			agent{
+				docker{
+					image 'snakee/golang-junit:1.21'
+				}
+			}
             steps {
-                echo 'Hello Worldfff'
+                dir ('bugtracker-backend'){
+					sh 'go test ./... -v'
+				}
             }
         }
     }
