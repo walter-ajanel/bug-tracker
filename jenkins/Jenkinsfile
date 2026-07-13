@@ -8,10 +8,16 @@ pipeline {
 					image 'snakee/golang-junit:1.21'
 				}
 			}
+			environment {
+                GOCACHE = "${WORKSPACE}/.gocache"
+            }
             steps {
-                dir ('bugtracker-backend'){
-					sh 'go test ./... -v'
-				}
+                dir('bugtracker-backend') {
+                    sh '''
+                        mkdir -p $GOCACHE
+                        go test ./... -v
+                    '''
+                }
             }
         }
     }
