@@ -17,7 +17,7 @@ pipeline {
                 dir('bugtracker-backend') {
                     sh '''
 						mkdir -p $GOCACHE
-                        go test ./... -v 2>&1 | go-junit-report > test-results.xml
+                        go test -v ./... 2>&1 | go-junit-report -set-exit-code > report.xml
 						
 						# Generate coverage report
                         go test -coverprofile=coverage.out -covermode=atomic ./...
