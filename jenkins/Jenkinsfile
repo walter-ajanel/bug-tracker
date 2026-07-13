@@ -17,7 +17,7 @@ pipeline {
                 dir('bugtracker-backend') {
                     sh '''
 						mkdir -p $GOCACHE
-                        go test ./... -v 2>&1 | go-unit-report > test-results.xml
+                        go test ./... -v 2>&1 | go-junit-report > test-results.xml
                     '''
                 }
             }
